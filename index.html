@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>DK WIN Hacker AI Predictor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: black;
+      font-family: 'Share Tech Mono', monospace;
+      color: #00ffcc;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(ellipse at center, #001a1a 0%, #000000 100%);
+      z-index: 0;
+    }
+
+    .matrix {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center center/cover;
+      opacity: 0.06;
+      z-index: 0;
+    }
+
+    .header {
+      background: #000;
+      border-bottom: 1px solid #00ffcc;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 20px;
+      font-weight: bold;
+      color: #00ffcc;
+      z-index: 1;
+      position: relative;
+      text-shadow: 0 0 10px #00ffcc;
+    }
+
+    .main {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      align-items: center;
+      padding: 10px;
+      z-index: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .prediction-box {
+      background: rgba(0, 0, 0, 0.75);
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 1px solid #00ffcc;
+      box-shadow: 0 0 25px #00ffcc;
+      width: 300px;
+      font-size: 14px;
+      margin-top: 10px;
+      position: relative;
+      animation: fadeIn 1s ease-out;
+      backdrop-filter: blur(4px);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .blip {
+      width: 12px; height: 12px;
+      background: #00ffcc;
+      border-radius: 50%;
+      position: absolute;
+      top: -10px; right: -10px;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.1; }
+    }
+
+    input[type=number] {
+      background: transparent;
+      border: 1px solid #00ffcc;
+      border-radius: 6px;
+      color: #00ffcc;
+      padding: 6px 10px;
+      width: 60px;
+      text-align: center;
+      box-shadow: inset 0 0 6px #00ffcc;
+      margin-bottom: 6px;
+    }
+
+    .button {
+      background: #000;
+      border: 1px solid #00ffcc;
+      color: #00ffcc;
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-shadow: 0 0 5px #00ffcc;
+    }
+
+    .button:hover {
+      background: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 15px #00ffcc;
+    }
+
+    .prediction-text {
+      margin-top: 6px;
+      font-weight: bold;
+      font-size: 12px;
+      color: #00ffaa;
+      border-top: 1px dashed #00ffcc;
+      padding-top: 4px;
+      animation: pulse 1.5s infinite alternate;
+      line-height: 1.2;
+    }
+
+    @keyframes pulse {
+      from { opacity: 0.6; }
+      to { opacity: 1; }
+    }
+
+    .timer {
+      margin-top: 5px;
+      font-size: 11px;
+      background: rgba(0, 255, 255, 0.08);
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid #00ffcc;
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+
+    .loader {
+      margin: 8px auto;
+      width: 36px;
+      height: 36px;
+      border: 3px solid #00ffcc;
+      border-top: 3px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    iframe {
+      flex-grow: 1;
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-top: 1px solid #00ffcc;
+      box-shadow: 0 0 15px rgba(0,255,255,0.4);
+      background: #000;
+      z-index: 1;
+      position: relative;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="matrix"></div>
+  <div class="header">DK WIN Hacker AI Prediction</div>
+  <div class="main">
+    <div class="prediction-box">
+      <div class="blip"></div>
+      <input type="number" id="inputNumber" min="0" max="9" placeholder="0-9">
+      <button class="button" onclick="predictAI()">Predict</button>
+      <div class="loader" id="loader"></div>
+      <div class="prediction-text" id="predictionText">এখানে প্রেডিকশন দেখাবে...</div>
+      <div class="timer" id="timerMessage">Next prediction in: 00:60</div>
+    </div>
+    <iframe src="https://dkwin9.com/#/register?invitationCode=13777106595"></iframe>
+  </div>
+
+  <audio id="typeSound" src="https://www.soundjay.com/button/sounds/button-4.mp3" preload="auto"></audio>
+
+  <script>
+    function playTypeSound() {
+      const sound = document.getElementById('typeSound');
+      sound.currentTime = 0;
+      sound.play();
+    }
+
+    function typeWriter(text, targetId, speed = 40) {
+      const target = document.getElementById(targetId);
+      target.innerHTML = "";
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          playTypeSound();
+          target.innerHTML += text.charAt(i);
+          i++;
+        } else {
+          clearInterval(interval);
+        }
+      }, speed);
+    }
+
+    function predictAI() {
+      const input = parseInt(document.getElementById('inputNumber').value);
+      const predictionText = document.getElementById('predictionText');
+      const loader = document.getElementById('loader');
+
+      if (isNaN(input) || input < 0 || input > 9) {
+        typeWriter("অনুগ্রহ করে ০-৯ এর মধ্যে নাম্বার দিন।", "predictionText");
+        return;
+      }
+
+      predictionText.innerHTML = "";
+      loader.style.display = 'block';
+
+      setTimeout(() => {
+        loader.style.display = 'none';
+        const result = Math.random() > 0.5 ? "BIG" : "SMALL";
+        const color = Math.random() > 0.5 ? "RED" : "GREEN";
+        const confidence = Math.floor(Math.random() * 20) + 80;
+        typeWriter(`রেজাল্ট: ${result} | কালার: ${color} | কনফিডেন্স: ${confidence}%`, "predictionText");
+      }, 2500);
+    }
+
+    setInterval(() => {
+      const now = new Date();
+      const secondsLeft = 60 - now.getSeconds();
+      const formattedSeconds = secondsLeft < 10 ? '0' + secondsLeft : secondsLeft;
+      document.getElementById("timerMessage").textContent = `Next prediction in: 00:${formattedSeconds}`;
+    }, 1000);
+  </script>
+</body>
+</html>
