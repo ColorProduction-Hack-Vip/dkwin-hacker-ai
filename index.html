@@ -40,13 +40,30 @@
       background: #000;
       border-bottom: 1px solid #00ffcc;
       text-align: center;
-      padding: 10px 0;
+      padding: 10px 0 6px;
       font-size: 20px;
       font-weight: bold;
       color: #00ffcc;
       z-index: 1;
       position: relative;
       text-shadow: 0 0 10px #00ffcc;
+    }
+
+    .notice-bar {
+      background: #001a1a;
+      color: #00ffee;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-bottom: 1px dashed #00ffcc;
+      text-align: center;
+      animation: slideNotice 15s linear infinite;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    @keyframes slideNotice {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
     }
 
     .main {
@@ -183,13 +200,15 @@
 <body>
   <div class="matrix"></div>
   <div class="header">DK WIN Hacker AI Prediction</div>
+  <div class="notice-bar"> Keep yourself calm, don't be overly greedy. Bet wisely.</div>
+
   <div class="main">
     <div class="prediction-box">
       <div class="blip"></div>
       <input type="number" id="inputNumber" min="0" max="9" placeholder="0-9">
       <button class="button" onclick="predictAI()">Predict</button>
       <div class="loader" id="loader"></div>
-      <div class="prediction-text" id="predictionText">এখানে প্রেডিকশন দেখাবে...</div>
+      <div class="prediction-text" id="predictionText">server successfully connected...</div>
       <div class="timer" id="timerMessage">Next prediction in: 00:60</div>
     </div>
     <iframe src="https://dkwin9.com/#/register?invitationCode=13777106595"></iframe>
@@ -202,6 +221,15 @@
       const sound = document.getElementById('typeSound');
       sound.currentTime = 0;
       sound.play();
+    }
+
+    function speakText(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'bn-BD';
+      utterance.pitch = 1;
+      utterance.rate = 1;
+      utterance.volume = 1;
+      speechSynthesis.speak(utterance);
     }
 
     function typeWriter(text, targetId, speed = 40) {
@@ -226,6 +254,7 @@
 
       if (isNaN(input) || input < 0 || input > 9) {
         typeWriter("অনুগ্রহ করে ০-৯ এর মধ্যে নাম্বার দিন।", "predictionText");
+        speakText("অনুগ্রহ করে ০ থেকে ৯ এর মধ্যে নাম্বার দিন।");
         return;
       }
 
@@ -237,7 +266,9 @@
         const result = Math.random() > 0.5 ? "BIG" : "SMALL";
         const color = Math.random() > 0.5 ? "RED" : "GREEN";
         const confidence = Math.floor(Math.random() * 20) + 80;
-        typeWriter(`রেজাল্ট: ${result} | কালার: ${color} | কনফিডেন্স: ${confidence}%`, "predictionText");
+        const message = `পরবর্তী রেজাল্ট আসতে পারে: ${result} | এবং কালার হতে পারে: ${color} | কনফিডেন্স: ${confidence}%`;
+        typeWriter(message, "predictionText");
+        speakText(message);
       }, 2500);
     }
 
